@@ -431,3 +431,33 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+# Changes specific to this fork
+
+## Auto restart
+
+Both services will try to auto restart.
+
+### How to test if the container is capable of restart
+
+https://stackoverflow.com/a/35086537
+
+After running the container you can inspect its policy, restart coun and last started time:
+
+```
+docker inspect -f "{{ .HostConfig.RestartPolicy }}" <container_id>
+docker inspect -f "{{ .RestartCount }}" <container_id>
+docker inspect -f "{{ .State.StartedAt }}" <container_id>
+```
+
+Then you can look into container processes:
+
+`docker exec -it <container_id> ps -aux` The PID 1 process - is the main process, after its death the whole container would die.
+
+Kill it using:
+
+`docker exec -it <container_id> kill -9 <pid>` (maybe omit -9 option? it somehow obstructed the test on UI test iMAC (28))
+
+And after this ensure that the container autorestarted:
+
+`docker inspect -f "{{ .RestartCount }}" <container_id>`

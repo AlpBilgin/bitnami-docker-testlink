@@ -3,6 +3,7 @@ version: '2'
 services:
   mariadb:
     image: 'bitnami/mariadb:10.3'
+    restart: 'always'
     environment:
       - MARIADB_USER=bn_testlink
       - MARIADB_DATABASE=bitnami_testlink
@@ -11,6 +12,7 @@ services:
       - 'mariadb_data:/bitnami'
   testlink:
     image: 'bitnami/testlink:1'
+    restart: 'always'
     environment:
       - MARIADB_HOST=mariadb
       - MARIADB_PORT_NUMBER=3306
